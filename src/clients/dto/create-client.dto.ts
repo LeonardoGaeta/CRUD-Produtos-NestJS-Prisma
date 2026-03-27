@@ -1,4 +1,4 @@
-import { IsEmail, isEmail, IsEmpty, IsString, MaxLength } from "class-validator";
+import { IsEmail, IsEmpty, IsString, MaxLength } from "class-validator";
 
 
 export class CreateClientDto {
