@@ -1,4 +1,4 @@
 export class Order {
-    precoTotal: number;
-    idClient: number;
+  precoTotal: number;
+  idClient: number;
 }

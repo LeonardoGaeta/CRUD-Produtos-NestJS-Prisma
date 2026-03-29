@@ -1,27 +1,36 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const res = ctx.getResponse();
-    const req = ctx.getRequest();
+    const res = ctx.getResponse<Response>();
+    const req = ctx.getRequest<Request>();
 
     const status =
-      (exception instanceof HttpException)
+      exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const message =
-      (exception instanceof HttpException)
-        ? this.extractMessage(exception.getResponse())
+    const response =
+      exception instanceof HttpException
+        ? exception.getResponse()
         : 'Erro interno do servidor.';
 
+    const message = this.extractMessage(response);
+
     res.status(status).json({
-      success:      false,
-      statusCode:   status,
-      path:         req.url,
-      timestamp:    new Date().toISOString(),
+      success: false,
+      statusCode: status,
+      path: req.url,
+      timestamp: new Date().toISOString(),
       error: {
         message,
       },
@@ -31,16 +40,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   private extractMessage(response: string | object) {
     if (typeof response === 'string') return response;
 
-    if (typeof response === 'object' && response !== null) {
-      const r = response as any;
+    const resObj = response as { message?: string | string[] };
 
-      if (Array.isArray(r.message)) {
-        return r.message.join(', ');
-      }
-
-      return r.message || r.error || JSON.stringify(r);
+    if (Array.isArray(resObj.message)) {
+      return resObj.message[0];
     }
 
-    return 'Erro inesperado';
+    return resObj.message || 'Erro inesperado';
   }
 }

@@ -50,7 +50,6 @@ model Client {
 
 model Order {
   id          Int       @id @default(autoincrement())
-  precoTotal  Decimal   @db.Decimal(11,2)
 
   idClient    Int
   client      Client    @relation(fields: [idClient], references: [id], onDelete: Restrict)
@@ -68,7 +67,6 @@ model OrderProduct {
   qtd         Int
 
   precoUnit   Decimal   @db.Decimal(11,2)
-  precoTotal  Decimal   @db.Decimal(11,2)
 
   orderId     Int
   productId   Int

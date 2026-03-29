@@ -25,7 +25,6 @@ CREATE TABLE "clients" (
 -- CreateTable
 CREATE TABLE "orders" (
     "id" SERIAL NOT NULL,
-    "precoTotal" DECIMAL(11,2) NOT NULL,
     "idClient" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -38,7 +37,6 @@ CREATE TABLE "order_product" (
     "id" SERIAL NOT NULL,
     "qtd" INTEGER NOT NULL,
     "precoUnit" DECIMAL(11,2) NOT NULL,
-    "precoTotal" DECIMAL(11,2) NOT NULL,
     "orderId" INTEGER NOT NULL,
     "productId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
